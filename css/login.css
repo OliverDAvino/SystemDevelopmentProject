@@ -1,0 +1,110 @@
+.login-bg {
+  min-height: 100vh;
+  background: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative circles */
+.login-bg .circle-tl {
+  width: 340px;
+  height: 340px;
+  top: -120px;
+  left: -120px;
+  background: var(--red);
+}
+
+.login-bg .circle-tr {
+  width: 210px;
+  height: 210px;
+  top: -55px;
+  right: -55px;
+  background: transparent;
+  border: 30px solid var(--red);
+}
+
+.login-bg .circle-bl {
+  width: 210px;
+  height: 210px;
+  bottom: -65px;
+  left: -55px;
+  background: transparent;
+  border: 30px solid var(--red);
+}
+
+.login-bg .circle-br {
+  width: 340px;
+  height: 340px;
+  bottom: -120px;
+  right: -100px;
+  background: var(--red);
+}
+
+/* Card */
+.login-card {
+  position: relative;
+  z-index: 10;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 40px 36px;
+  width: 380px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* Logo mark */
+.login-logo {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.logo-mark {
+  width: 48px;
+  height: 48px;
+  background: var(--red);
+  border-radius: 6px;
+  position: relative;
+}
+
+.logo-mark::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  background: var(--white);
+}
+
+/* Typography */
+.login-card h1 {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.login-subtitle {
+  font-size: 13px;
+  color: var(--gray-400);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+/* Submit button */
+.login-submit {
+  width: 100%;
+  padding: 12px;
+  font-size: 15px;
+  margin-top: 6px;
+  min-height: 44px;
+}
+
+/* Hint text */
+.login-hint {
+  font-size: 11px;
+  color: var(--gray-400);
+  text-align: center;
+  margin-top: 16px;
+}

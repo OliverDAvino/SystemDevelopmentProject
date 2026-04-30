@@ -1,0 +1,69 @@
+.nf-bg {
+  min-height: 100vh;
+  background: var(--black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.nf-bg .circle-tl {
+  width: 340px;
+  height: 340px;
+  top: -120px;
+  left: -120px;
+  background: var(--red);
+}
+
+.nf-bg .circle-tr {
+  width: 200px;
+  height: 200px;
+  top: -50px;
+  right: -50px;
+  background: transparent;
+  border: 28px solid var(--red);
+}
+
+.nf-bg .circle-bl {
+  width: 200px;
+  height: 200px;
+  bottom: -60px;
+  left: -50px;
+  background: transparent;
+  border: 28px solid var(--red);
+}
+
+.nf-bg .circle-br {
+  width: 340px;
+  height: 340px;
+  bottom: -120px;
+  right: -100px;
+  background: var(--red);
+}
+
+.nf-card {
+  position: relative;
+  z-index: 10;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 48px 40px;
+  width: 340px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.nf-code {
+  font-size: 64px;
+  font-weight: 800;
+  color: var(--red);
+  font-style: italic;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.nf-message {
+  font-size: 14px;
+  color: var(--gray-600);
+  margin-bottom: 28px;
+}
