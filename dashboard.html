@@ -212,10 +212,13 @@
         if (rows.length === 0) return;
         // Skip if only the empty-state row is present
         if (rows.length === 1 && rows[0].querySelector('.table-empty')) return;
-        if (currentSort === 'id') return; // default order — no-op
-
         sorting = true;
         rows.sort(function (a, b) {
+          if (currentSort === 'id') {
+            var ai = parseInt((a.querySelector('.cell-num') || {}).textContent || '0', 10);
+            var bi = parseInt((b.querySelector('.cell-num') || {}).textContent || '0', 10);
+            return ai - bi;
+          }
           if (currentSort === 'name') {
             var an = (a.querySelector('.cell-name') || {}).textContent || '';
             var bn = (b.querySelector('.cell-name') || {}).textContent || '';
