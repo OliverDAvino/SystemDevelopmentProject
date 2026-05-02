@@ -1,9 +1,11 @@
 import { getProducts, createProduct, updateProduct, deleteProduct } from './api.js';
-import { clearSession, requireAuth } from './auth.js';
+import { clearSession, requireAuth, getUser } from './auth.js';
 import { openAddModal, openUpdateModal, openDeleteModal, showToast } from './components.js';
 import { SVG } from './svg.js';
 
 requireAuth();
+
+const isSecretary = getUser()?.role === 'secretary';
 
 /* ── State ─────────────────────────────────────────────── */
 let products      = [];
@@ -12,9 +14,9 @@ let activeFilter  = 'all';
 
 /* ── Status config ─────────────────────────────────────── */
 const STATUS = {
-  'in-stock':  { label: 'In Stock'     },
-  'low-stock': { label: 'Low Stock'    },
-  'out-stock': { label: 'Out of Stock' },
+  'in-stock':  { label: 'In Stock'  },
+  'low-stock': { label: 'Low Stock' },
+  'critical':  { label: 'Critical'  },
 };
 
 /* ── DOM refs ──────────────────────────────────────────── */
@@ -24,6 +26,9 @@ const filterBtns   = document.querySelectorAll('.filter-btn');
 const addBtn       = document.getElementById('add-btn');
 const tableBody    = document.getElementById('table-body');
 const footerCount  = document.getElementById('footer-count');
+
+/* ── Role-based UI ─────────────────────────────────────── */
+if (isSecretary) addBtn.classList.add('hidden');
 
 /* ── Init ──────────────────────────────────────────────── */
 init();
@@ -103,33 +108,27 @@ function renderTable() {
 }
 
 function buildRow(p, index) {
-  const s = STATUS[p.status];
+  const s = STATUS[p.status] || { label: p.status };
   const rowClass = index % 2 === 1 ? 'row-alt' : '';
-  const linkCell = p.link
-    ? `<a href="${escHtml(p.link)}" target="_blank" rel="noopener noreferrer">View</a>`
-    : `<span class="no-link">—</span>`;
 
   return `
     <tr class="${rowClass}">
       <td class="cell-num">${index + 1}</td>
       <td class="cell-name">${escHtml(p.name)}</td>
-      <td class="cell-link">${linkCell}</td>
+      <td class="cell-size">${escHtml(p.size || '')}</td>
       <td class="cell-qty">${p.quantity}</td>
-      <td>
-        <span class="status-badge status-${p.status}">
-          <span class="status-dot dot-${p.status}"></span>
-          ${s.label}
-        </span>
-      </td>
       <td>
         <div class="cell-actions">
           <button class="icon-btn icon-btn-edit edit-btn" data-id="${p.id}" title="Edit">
             ${SVG.edit}
           </button>
-          <button class="icon-btn icon-btn-delete delete-btn" data-id="${p.id}" title="Delete">
-            ${SVG.trash}
-          </button>
+          ${isSecretary ? '' : `<button class="icon-btn icon-btn-delete delete-btn" data-id="${p.id}" title="Delete">${SVG.trash}</button>`}
         </div>
+      </td>
+      <td>
+        <span class="status-badge status-${p.status}">
+          ${s.label}
+        </span>
       </td>
     </tr>
   `;

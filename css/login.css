@@ -1,3 +1,4 @@
+/* ── Login page ────────────────────────────────────── */
 .login-bg {
   min-height: 100vh;
   background: var(--black);
@@ -8,103 +9,164 @@
   overflow: hidden;
 }
 
-/* Decorative circles */
-.login-bg .circle-tl {
+/* ── Organic blob shapes ───────────────────────────── */
+.blob {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Top-left large red blob */
+.blob-tl {
+  width: 580px;
+  height: 500px;
+  background: #8B0000;
+  top: -200px;
+  left: -200px;
+  border-radius: 72% 28% 61% 39% / 46% 63% 37% 54%;
+}
+
+/* Left-side mid red blob */
+.blob-lm {
   width: 340px;
-  height: 340px;
-  top: -120px;
-  left: -120px;
+  height: 420px;
   background: var(--red);
+  top: 50%;
+  left: -200px;
+  transform: translateY(-55%);
+  border-radius: 35% 65% 78% 22% / 58% 38% 62% 42%;
 }
 
-.login-bg .circle-tr {
-  width: 210px;
-  height: 210px;
-  top: -55px;
-  right: -55px;
-  background: transparent;
-  border: 30px solid var(--red);
-}
-
-.login-bg .circle-bl {
-  width: 210px;
-  height: 210px;
-  bottom: -65px;
-  left: -55px;
-  background: transparent;
-  border: 30px solid var(--red);
-}
-
-.login-bg .circle-br {
-  width: 340px;
-  height: 340px;
-  bottom: -120px;
-  right: -100px;
+/* Bottom-right large red blob */
+.blob-br {
+  width: 600px;
+  height: 520px;
   background: var(--red);
+  bottom: -230px;
+  right: -220px;
+  border-radius: 52% 48% 33% 67% / 62% 41% 59% 38%;
 }
 
-/* Card */
+/* Bottom-left accent blob */
+.blob-bl {
+  width: 300px;
+  height: 250px;
+  background: #8B0000;
+  bottom: -110px;
+  left: 40px;
+  border-radius: 68% 32% 45% 55% / 38% 72% 28% 62%;
+}
+
+/* ── Page-level logo (top-right) ───────────────────── */
+.page-logo {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  z-index: 20;
+  line-height: 0;
+}
+
+.page-logo-img {
+  height: 60px;
+  width: auto;
+  display: block;
+}
+
+/* ── Login card ────────────────────────────────────── */
 .login-card {
   position: relative;
   z-index: 10;
   background: var(--white);
   border-radius: var(--radius-lg);
-  padding: 40px 36px;
-  width: 380px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  padding: 44px 40px 40px;
+  width: 420px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
 }
 
-/* Logo mark */
-.login-logo {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.logo-mark {
-  width: 48px;
-  height: 48px;
-  background: var(--red);
-  border-radius: 6px;
-  position: relative;
-}
-
-.logo-mark::after {
-  content: '';
-  position: absolute;
-  inset: 8px;
-  border-radius: 50%;
-  background: var(--white);
-}
-
-/* Typography */
+/* ── Card typography ───────────────────────────────── */
 .login-card h1 {
   font-size: 22px;
   font-weight: 700;
   text-align: center;
   margin-bottom: 6px;
+  color: var(--black);
 }
 
 .login-subtitle {
   font-size: 13px;
   color: var(--gray-400);
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 28px;
 }
 
-/* Submit button */
+/* ── Password row with "Forget Password?" ──────────── */
+.password-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.password-header label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--black);
+  margin: 0;
+}
+
+.forget-link {
+  font-size: 12px;
+  color: var(--gray-400);
+  text-decoration: none;
+}
+
+.forget-link:hover { color: var(--red); }
+
+/* Override form-group label margin when using password-header */
+.password-group .password-header { margin-bottom: 6px; }
+.password-group > label { display: none; }
+
+/* ── Remember password checkbox ────────────────────── */
+.remember-row {
+  margin-top: 4px;
+  margin-bottom: 20px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--gray-600);
+  cursor: pointer;
+  user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--red);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+/* ── Submit button ─────────────────────────────────── */
 .login-submit {
   width: 100%;
-  padding: 12px;
+  padding: 13px;
   font-size: 15px;
-  margin-top: 6px;
-  min-height: 44px;
+  border-radius: var(--radius-sm);
+  min-height: 46px;
 }
 
-/* Hint text */
-.login-hint {
+/* ── Error message ─────────────────────────────────── */
+#login-error {
+  margin-bottom: 10px;
+}
+
+/* ── Temporary credentials hint ────────────────────── */
+.credentials-hint {
+  margin-top: 6px;
   font-size: 11px;
   color: var(--gray-400);
-  text-align: center;
-  margin-top: 16px;
+  line-height: 1.5;
 }

@@ -1,3 +1,4 @@
+/* ── 404 page ──────────────────────────────────────── */
 .nf-bg {
   min-height: 100vh;
   background: var(--black);
@@ -8,62 +9,178 @@
   overflow: hidden;
 }
 
-.nf-bg .circle-tl {
-  width: 340px;
-  height: 340px;
-  top: -120px;
-  left: -120px;
+/* ── Organic blob shapes (same palette as login) ───── */
+.nf-bg .blob {
+  position: absolute;
+  pointer-events: none;
+}
+
+.nf-bg .blob-tl {
+  width: 520px;
+  height: 460px;
+  background: #8B0000;
+  top: -180px;
+  left: -180px;
+  border-radius: 72% 28% 61% 39% / 46% 63% 37% 54%;
+}
+
+.nf-bg .blob-lm {
+  width: 300px;
+  height: 380px;
   background: var(--red);
+  top: 55%;
+  left: -180px;
+  transform: translateY(-55%);
+  border-radius: 35% 65% 78% 22% / 58% 38% 62% 42%;
 }
 
-.nf-bg .circle-tr {
-  width: 200px;
-  height: 200px;
-  top: -50px;
-  right: -50px;
-  background: transparent;
-  border: 28px solid var(--red);
-}
-
-.nf-bg .circle-bl {
-  width: 200px;
-  height: 200px;
-  bottom: -60px;
-  left: -50px;
-  background: transparent;
-  border: 28px solid var(--red);
-}
-
-.nf-bg .circle-br {
-  width: 340px;
-  height: 340px;
-  bottom: -120px;
-  right: -100px;
+.nf-bg .blob-br {
+  width: 560px;
+  height: 480px;
   background: var(--red);
+  bottom: -210px;
+  right: -200px;
+  border-radius: 52% 48% 33% 67% / 62% 41% 59% 38%;
 }
 
+.nf-bg .blob-bl {
+  width: 270px;
+  height: 220px;
+  background: #8B0000;
+  bottom: -100px;
+  left: 60px;
+  border-radius: 68% 32% 45% 55% / 38% 72% 28% 62%;
+}
+
+/* ── Page-level logo (top-right) ───────────────────── */
+.nf-page-logo {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  z-index: 20;
+  line-height: 0;
+}
+
+.nf-page-logo .page-logo-img {
+  height: 60px;
+  width: auto;
+  display: block;
+}
+
+/* ── 404 card ──────────────────────────────────────── */
 .nf-card {
   position: relative;
   z-index: 10;
   background: var(--white);
   border-radius: var(--radius-lg);
-  padding: 48px 40px;
-  width: 340px;
+  padding: 52px 44px;
+  width: 360px;
   text-align: center;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.55);
 }
 
-.nf-code {
-  font-size: 64px;
+/* ── Browser-window illustration ──────────────────── */
+.nf-browser {
+  width: 240px;
+  margin: 0 auto 28px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.nf-browser-bar {
+  background: #dde8f0;
+  padding: 8px 10px 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.nf-traffic-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.nf-traffic-dot:nth-child(1) { background: #ff5f57; }
+.nf-traffic-dot:nth-child(2) { background: #febc2e; }
+.nf-traffic-dot:nth-child(3) { background: #28c840; }
+
+.nf-browser-url {
+  flex: 1;
+  height: 10px;
+  background: #c5d5e0;
+  border-radius: 4px;
+  margin-left: 6px;
+}
+
+.nf-browser-body {
+  background: var(--red);
+  padding: 18px 16px 22px;
+  position: relative;
+}
+
+.nf-browser-404 {
+  font-size: 52px;
   font-weight: 800;
-  color: var(--red);
-  font-style: italic;
+  color: #F4A22C;
   line-height: 1;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
+  font-style: italic;
 }
 
-.nf-message {
-  font-size: 14px;
-  color: var(--gray-600);
-  margin-bottom: 28px;
+.nf-browser-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: flex-start;
 }
+
+.nf-browser-line {
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.6);
+}
+
+.nf-browser-line:nth-child(1) { width: 50px; }
+.nf-browser-line:nth-child(2) { width: 30px; }
+
+.nf-browser-dots {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  display: flex;
+  gap: 4px;
+}
+
+.nf-browser-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.7);
+}
+
+/* ── Card text ─────────────────────────────────────── */
+.nf-message {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 24px;
+}
+
+/* ── Back button ───────────────────────────────────── */
+.nf-back-btn {
+  display: block;
+  width: 100%;
+  padding: 13px;
+  background: var(--red);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  text-align: center;
+  text-decoration: none;
+  transition: background 0.18s;
+}
+
+.nf-back-btn:hover { background: var(--red-dark); }

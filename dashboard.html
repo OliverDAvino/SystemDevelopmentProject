@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Dashboard — StoreManager</title>
+  <title>Dashboard — Café Fantini Canada</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -14,53 +14,123 @@
 
   <div class="dash-layout">
 
-    <!-- Header -->
+    <!-- ── Header ───────────────────────────────────── -->
     <header class="dash-header">
       <div class="dash-logo">
-        <div class="dash-logo-mark"></div>
-        <span>StoreManager</span>
+        <img src="public/images/musetti-logo.png" alt="Musetti" class="dash-logo-img" />
       </div>
-      <button class="btn btn-ghost" id="logout-btn">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+
+      <button class="logout-btn" id="logout-btn">
+        Logout
+        <!-- logout arrow icon -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
           <polyline points="16 17 21 12 16 7"/>
           <line x1="21" y1="12" x2="9" y2="12"/>
         </svg>
-        Logout
       </button>
     </header>
 
-    <!-- Main -->
+    <!-- ── Main ─────────────────────────────────────── -->
     <main class="dash-main">
 
-      <!-- Toolbar -->
-      <div class="dash-toolbar">
-        <div class="search-wrap">
-          <span class="search-icon">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="11" cy="11" r="8"/>
-              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      <!-- Search bar -->
+      <div class="search-wrap">
+        <input
+          class="search-input"
+          id="search-input"
+          type="search"
+          placeholder="Search"
+          autocomplete="off"
+        />
+        <span class="search-icon" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+        </span>
+      </div>
+
+      <!-- White card: toolbar + table -->
+      <div class="dash-card">
+
+      <!-- Filter toolbar -->
+      <div class="filter-toolbar">
+
+        <!-- Left group: funnel + Sort + Product Status + Reset -->
+        <div class="filter-left">
+
+          <!-- Funnel icon -->
+          <button class="funnel-btn" aria-label="Filters" id="funnel-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
             </svg>
-          </span>
-          <input
-            class="search-input"
-            id="search-input"
-            type="search"
-            placeholder="Search products..."
-            autocomplete="off"
-          />
+          </button>
+
+          <!-- Sort dropdown -->
+          <div class="dropdown-wrap" id="sort-wrap">
+            <button class="dropdown-trigger" id="sort-trigger" aria-expanded="false" aria-haspopup="listbox">
+              Sort
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+
+            <div class="sort-panel hidden" id="sort-panel" role="listbox">
+              <label class="sort-option" data-sort="id">
+                <span class="sort-check checked" id="sort-check-id"></span>
+                By ID
+              </label>
+              <label class="sort-option" data-sort="name">
+                <span class="sort-check" id="sort-check-name"></span>
+                By Product Name
+              </label>
+              <label class="sort-option" data-sort="size">
+                <span class="sort-check" id="sort-check-size"></span>
+                By Size
+              </label>
+              <label class="sort-option" data-sort="qty">
+                <span class="sort-check" id="sort-check-qty"></span>
+                By Quantity
+              </label>
+            </div>
+          </div>
+
+          <div class="toolbar-divider"></div>
+
+          <!-- Product Status dropdown trigger -->
+          <div class="dropdown-wrap" id="status-wrap">
+            <button class="dropdown-trigger" id="status-trigger" aria-haspopup="dialog">
+              Product Status
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </button>
+          </div>
+
+          <div class="toolbar-divider"></div>
+
+          <!-- Reset Filter -->
+          <button class="reset-btn" id="reset-filter-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <polyline points="1 4 1 10 7 10"/>
+              <path d="M3.51 15a9 9 0 1 0 .49-4.5"/>
+            </svg>
+            Reset Filter
+          </button>
         </div>
 
-        <div class="filter-group">
-          <button class="filter-btn active" data-filter="all">All</button>
-          <button class="filter-btn" data-filter="in-stock">In Stock</button>
-          <button class="filter-btn" data-filter="low-stock">Low Stock</button>
-          <button class="filter-btn" data-filter="out-stock">Out of Stock</button>
-        </div>
+        <!-- Right: Add Product -->
+        <button class="add-btn" id="add-btn">Add product</button>
 
-        <button class="btn btn-primary add-btn" id="add-btn">
-          + Add product
-        </button>
+      </div><!-- /filter-toolbar -->
+
+      <!-- Hidden filter buttons — required by dashboard.js -->
+      <div class="hidden-filters" aria-hidden="true">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="in-stock">In Stock</button>
+        <button class="filter-btn" data-filter="low-stock">Low Stock</button>
+        <button class="filter-btn" data-filter="critical">Critical</button>
       </div>
 
       <!-- Table -->
@@ -68,12 +138,12 @@
         <table class="product-table">
           <thead>
             <tr>
-              <th>#</th>
+              <th>ID</th>
               <th>Product Name</th>
-              <th>Item Link</th>
+              <th>Size</th>
               <th>Quantity</th>
-              <th>Status</th>
-              <th>Actions</th>
+              <th></th>
+              <th>STATUS</th>
             </tr>
           </thead>
           <tbody id="table-body">
@@ -86,8 +156,166 @@
         <span id="footer-count"></span>
       </div>
 
+      </div><!-- /dash-card -->
+
     </main>
-  </div>
+  </div><!-- /dash-layout -->
+
+  <!-- ── Toolbar interactivity (sort / filter UI) ──── -->
+  <script>
+    (function () {
+      // ── Sort ────────────────────────────────────────
+      var currentSort = 'id';
+      var sortTrigger = document.getElementById('sort-trigger');
+      var sortPanel   = document.getElementById('sort-panel');
+      var sortOptions = document.querySelectorAll('.sort-option');
+      var tbody       = document.getElementById('table-body');
+      var sorting     = false;
+
+      // Toggle sort panel
+      sortTrigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        var open = !sortPanel.classList.contains('hidden');
+        sortPanel.classList.toggle('hidden', open);
+        sortTrigger.setAttribute('aria-expanded', String(!open));
+      });
+
+      // Close panels on outside click
+      document.addEventListener('click', function () {
+        sortPanel.classList.add('hidden');
+        sortTrigger.setAttribute('aria-expanded', 'false');
+      });
+
+      sortPanel.addEventListener('click', function (e) { e.stopPropagation(); });
+
+      // Sort option selected
+      sortOptions.forEach(function (opt) {
+        opt.addEventListener('click', function () {
+          currentSort = this.dataset.sort;
+          // update checkmarks
+          document.querySelectorAll('.sort-check').forEach(function (c) { c.classList.remove('checked'); });
+          this.querySelector('.sort-check').classList.add('checked');
+          sortPanel.classList.add('hidden');
+          sortTrigger.setAttribute('aria-expanded', 'false');
+          applySort();
+        });
+      });
+
+      // MutationObserver — re-sort after dashboard.js re-renders the table
+      var observer = new MutationObserver(function () {
+        if (!sorting) { setTimeout(applySort, 0); }
+      });
+      observer.observe(tbody, { childList: true });
+
+      function applySort() {
+        var rows = Array.from(tbody.querySelectorAll('tr'));
+        if (rows.length === 0) return;
+        // Skip if only the empty-state row is present
+        if (rows.length === 1 && rows[0].querySelector('.table-empty')) return;
+        if (currentSort === 'id') return; // default order — no-op
+
+        sorting = true;
+        rows.sort(function (a, b) {
+          if (currentSort === 'name') {
+            var an = (a.querySelector('.cell-name') || {}).textContent || '';
+            var bn = (b.querySelector('.cell-name') || {}).textContent || '';
+            return an.trim().localeCompare(bn.trim());
+          }
+          if (currentSort === 'size') {
+            var as = (a.querySelector('.cell-size') || {}).textContent || '';
+            var bs = (b.querySelector('.cell-size') || {}).textContent || '';
+            var an2 = parseFloat(as) || 0;
+            var bn2 = parseFloat(bs) || 0;
+            return an2 !== bn2 ? an2 - bn2 : as.trim().localeCompare(bs.trim());
+          }
+          if (currentSort === 'qty') {
+            var aq = parseInt((a.querySelector('.cell-qty') || {}).textContent || '0', 10);
+            var bq = parseInt((b.querySelector('.cell-qty') || {}).textContent || '0', 10);
+            return aq - bq;
+          }
+          return 0;
+        });
+        rows.forEach(function (r) { tbody.appendChild(r); });
+        sorting = false;
+      }
+
+      // ── Product Status filter modal ──────────────────
+      var statusTrigger = document.getElementById('status-trigger');
+
+      statusTrigger.addEventListener('click', function (e) {
+        e.stopPropagation();
+        openStatusModal();
+      });
+
+      function openStatusModal() {
+        var existingOverlay = document.getElementById('status-overlay');
+        if (existingOverlay) { existingOverlay.remove(); return; }
+
+        var activeFilter = (document.querySelector('.filter-btn.active') || {}).dataset.filter || 'all';
+
+        var overlay = document.createElement('div');
+        overlay.id = 'status-overlay';
+        overlay.className = 'overlay';
+
+        overlay.innerHTML = [
+          '<div class="modal-card status-modal-card" id="status-modal-inner">',
+          '  <h2>Select Product Status</h2>',
+          '  <div class="status-toggle-group">',
+          '    <button class="status-toggle' + (activeFilter === 'in-stock'  ? ' active' : '') + '" data-val="in-stock">In Stock</button>',
+          '    <button class="status-toggle' + (activeFilter === 'low-stock' ? ' active' : '') + '" data-val="low-stock">Low Stock</button>',
+          '    <button class="status-toggle' + (activeFilter === 'critical'  ? ' active' : '') + '" data-val="critical">Critical</button>',
+          '  </div>',
+          '  <p class="status-modal-hint">*You can choose multiple Order status</p>',
+          '  <button class="btn btn-primary status-apply-btn" id="status-apply">Apply Now</button>',
+          '</div>'
+        ].join('');
+
+        // Close on backdrop click
+        overlay.addEventListener('click', function (e) {
+          if (e.target === overlay) overlay.remove();
+        });
+        overlay.querySelector('#status-modal-inner').addEventListener('click', function (e) {
+          e.stopPropagation();
+        });
+
+        // Toggle buttons (single-select — maps to hidden filter buttons)
+        overlay.querySelectorAll('.status-toggle').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            overlay.querySelectorAll('.status-toggle').forEach(function (b) { b.classList.remove('active'); });
+            this.classList.toggle('active');
+          });
+        });
+
+        overlay.querySelector('#status-apply').addEventListener('click', function () {
+          var active = overlay.querySelector('.status-toggle.active');
+          var val = active ? active.dataset.val : null;
+          var filterBtn = val
+            ? document.querySelector('.filter-btn[data-filter="' + val + '"]')
+            : document.querySelector('.filter-btn[data-filter="all"]');
+          if (filterBtn) filterBtn.click();
+          overlay.remove();
+        });
+
+        document.body.appendChild(overlay);
+      }
+
+      // ── Reset Filter ─────────────────────────────────
+      document.getElementById('reset-filter-btn').addEventListener('click', function () {
+        // Reset status filter
+        var allBtn = document.querySelector('.filter-btn[data-filter="all"]');
+        if (allBtn) allBtn.click();
+        // Reset sort
+        currentSort = 'id';
+        document.querySelectorAll('.sort-check').forEach(function (c) { c.classList.remove('checked'); });
+        var idCheck = document.getElementById('sort-check-id');
+        if (idCheck) idCheck.classList.add('checked');
+        // Clear search
+        var searchInput = document.getElementById('search-input');
+        if (searchInput) { searchInput.value = ''; searchInput.dispatchEvent(new Event('input')); }
+      });
+
+    })();
+  </script>
 
   <script type="module" src="js/dashboard.js"></script>
 </body>

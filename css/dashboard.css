@@ -1,327 +1,421 @@
+/* ── Layout ──────────────────────────────────────────── */
 .dash-layout {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background: var(--gray-100);
+  background: var(--black);
 }
 
 /* ── Header ──────────────────────────────────────────── */
 .dash-header {
   background: var(--red);
-  height: 56px;
+  height: 68px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding: 0 28px;
   position: sticky;
   top: 0;
   z-index: 50;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
-}
-
-.dash-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--white);
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-}
-
-.dash-logo-mark {
-  width: 32px;
-  height: 32px;
-  background: var(--white);
-  border-radius: 5px;
-  position: relative;
   flex-shrink: 0;
 }
 
-.dash-logo-mark::after {
-  content: '';
-  position: absolute;
-  inset: 6px;
-  border-radius: 50%;
-  background: var(--red);
-}
-
-/* ── Main content ────────────────────────────────────── */
-.dash-main {
-  flex: 1;
-  padding: 24px;
-  max-width: 1100px;
-  width: 100%;
-  margin: 0 auto;
-}
-
-/* ── Toolbar ─────────────────────────────────────────── */
-.dash-toolbar {
+/* Logo */
+.dash-logo {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 18px;
-  flex-wrap: wrap;
 }
 
+.dash-logo-img {
+  height: 60px;
+  width: auto;
+  display: block;
+}
+
+/* Logout button — white pill */
+.logout-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--white);
+  color: var(--black);
+  font-size: 14px;
+  font-weight: 700;
+  padding: 9px 18px;
+  border-radius: var(--radius-pill);
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.18s;
+}
+
+.logout-btn:hover { opacity: 0.88; }
+
+/* ── Main area ────────────────────────────────────────── */
+.dash-main {
+  flex: 1;
+  padding: 24px 32px 32px;
+}
+
+/* ── Search bar ───────────────────────────────────────── */
 .search-wrap {
   position: relative;
-  flex: 1;
-  min-width: 200px;
+  margin-bottom: 14px;
 }
 
 .search-icon {
   position: absolute;
-  left: 11px;
+  right: 14px;
   top: 50%;
   transform: translateY(-50%);
   color: var(--gray-400);
   pointer-events: none;
+  display: flex;
+  align-items: center;
 }
 
 .search-input {
   width: 100%;
-  padding: 9px 12px 9px 34px;
-  border: 1.5px solid var(--gray-200);
-  border-radius: 6px;
-  font-size: 14px;
+  padding: 13px 44px 13px 18px;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 15px;
   background: var(--white);
+  color: var(--black);
   outline: none;
-  transition: border-color 0.2s;
+  box-shadow: var(--shadow-sm);
 }
 
-.search-input:focus {
-  border-color: var(--red);
+.search-input::placeholder { color: var(--gray-400); }
+
+/* ── White card: wraps toolbar + table ────────────────── */
+.dash-card {
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
 }
 
-.filter-group {
+/* ── Filter toolbar ───────────────────────────────────── */
+.filter-toolbar {
   display: flex;
-  gap: 6px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
   flex-wrap: wrap;
 }
 
-.filter-btn {
-  padding: 8px 13px;
+.filter-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--white);
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--gray-200);
+}
+
+/* Funnel icon button */
+.funnel-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  color: var(--gray-600);
+  border-radius: 50%;
+  transition: background 0.15s;
+  flex-shrink: 0;
+}
+
+.funnel-btn:hover { background: var(--gray-100); }
+
+/* Dropdown triggers (Sort / Product Status) */
+.dropdown-wrap { position: relative; }
+
+.dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--black);
   border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.dropdown-trigger:hover { background: var(--gray-100); }
+
+/* Divider between left-group pills */
+.toolbar-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--gray-200);
+  flex-shrink: 0;
+}
+
+/* Reset Filter button */
+.reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--red);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+
+.reset-btn:hover { background: #fff0f0; }
+
+/* Add Product button */
+.add-btn {
+  background: var(--black);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 700;
+  padding: 11px 22px;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.18s;
+}
+
+.add-btn:hover { opacity: 0.8; }
+
+/* ── Sort dropdown panel ──────────────────────────────── */
+.sort-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 60;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: 8px 0;
+  min-width: 190px;
+  border: 1px solid var(--gray-200);
+}
+
+.sort-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 16px;
   font-size: 13px;
   font-weight: 500;
+  color: var(--black);
+  cursor: pointer;
+  transition: background 0.12s;
+  user-select: none;
+}
+
+.sort-option:hover { background: var(--gray-100); }
+
+/* Custom red checkbox for sort options */
+.sort-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid var(--gray-200);
   background: var(--white);
-  border: 1.5px solid var(--gray-200);
-  color: var(--gray-600);
-  transition: all 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, border-color 0.15s;
 }
 
-.filter-btn:hover {
+.sort-check.checked {
+  background: var(--red);
   border-color: var(--red);
-  color: var(--red);
 }
 
-.filter-btn.active {
+.sort-check.checked::after {
+  content: '';
+  display: block;
+  width: 5px;
+  height: 9px;
+  border: 2px solid var(--white);
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg) translate(-1px, -1px);
+}
+
+/* ── Product Status filter modal ─────────────────────── */
+.status-modal-card {
+  width: 440px;
+  text-align: left;
+}
+
+.status-modal-card h2 {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.status-toggle-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.status-toggle {
+  padding: 9px 20px;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--gray-200);
+  background: var(--white);
+  color: var(--black);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.status-toggle.active {
   background: var(--red);
   border-color: var(--red);
   color: var(--white);
 }
 
-.add-btn {
-  padding: 9px 18px;
+.status-toggle:hover:not(.active) { border-color: var(--red); color: var(--red); }
+
+.status-modal-hint {
+  font-size: 12px;
+  color: var(--gray-400);
+  margin-bottom: 20px;
 }
 
-/* ── Table ───────────────────────────────────────────── */
+.status-apply-btn {
+  width: 100%;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+}
+
+/* ── Hidden filter buttons (dashboard.js compatibility) ─ */
+.hidden-filters { display: none; }
+
+/* ── Table wrapper — inside .dash-card, no own bg/shadow ─ */
 .table-wrap {
-  background: var(--white);
-  border-radius: 10px;
   overflow: hidden;
-  box-shadow: var(--shadow-sm);
-  border: 1px solid var(--gray-200);
 }
 
+/* ── Product table ────────────────────────────────────── */
 .product-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
 }
 
-.product-table thead {
-  background: var(--black);
-  color: var(--white);
-}
+/* Header row — light grey background, dark text */
+.product-table thead { background: #f5f5f5; }
 
 .product-table th {
-  padding: 13px 16px;
+  padding: 14px 18px;
   text-align: left;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  text-transform: uppercase;
+  color: var(--black);
   letter-spacing: 0.6px;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--gray-200);
 }
 
+/* Body rows */
 .product-table td {
-  padding: 12px 16px;
+  padding: 14px 18px;
   border-bottom: 1px solid var(--gray-200);
   vertical-align: middle;
+  color: var(--black);
 }
 
-.product-table tbody tr:last-child td {
-  border-bottom: none;
-}
+.product-table tbody tr:last-child td { border-bottom: none; }
+.product-table tbody tr:hover td { background: #fafafa; }
 
-.product-table tbody tr:hover td {
-  background: #fafafa;
-}
-
-.product-table tbody tr.row-alt td {
-  background: var(--gray-100);
-}
-
-.product-table tbody tr.row-alt:hover td {
-  background: #ebebeb;
-}
-
-/* ── Table cells ─────────────────────────────────────── */
+/* ── Table cells ──────────────────────────────────────── */
 .cell-num {
   color: var(--gray-400);
   font-size: 13px;
-  width: 44px;
-}
-
-.cell-name {
   font-weight: 500;
+  min-width: 60px;
 }
 
-.cell-link a {
-  color: var(--red);
-  font-size: 13px;
-  font-weight: 500;
-  text-decoration: none;
-}
+.cell-name { font-weight: 500; }
 
-.cell-link a:hover {
-  text-decoration: underline;
-}
+.cell-size { color: var(--gray-600); }
 
-.cell-link .no-link {
-  color: var(--gray-400);
-}
-
-.cell-qty {
-  font-weight: 600;
-}
+.cell-qty { font-weight: 600; }
 
 .cell-actions {
   display: flex;
-  gap: 6px;
-}
-
-/* ── Status badge ────────────────────────────────────── */
-.status-badge {
-  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 4px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  white-space: nowrap;
+  gap: 8px;
 }
 
-.status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-
-/* ── Icon action buttons ─────────────────────────────── */
+/* ── Icon action buttons ──────────────────────────────── */
 .icon-btn {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1.5px solid transparent;
-  transition: all 0.18s;
+  border: none;
+  transition: opacity 0.15s;
   flex-shrink: 0;
+  background: transparent;
+  color: var(--gray-600);
 }
 
-.icon-btn-edit {
-  background: #e8f4fd;
-  color: #1a73e8;
-  border-color: #c5ddf9;
+.icon-btn-edit { color: var(--gray-600); }
+.icon-btn-edit:hover { color: var(--black); }
+
+.icon-btn-delete { color: var(--gray-600); }
+.icon-btn-delete:hover { color: var(--red); }
+
+/* ── Status badge — pill, no dot ──────────────────────── */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.icon-btn-edit:hover {
-  background: #1a73e8;
-  color: var(--white);
-  border-color: #1a73e8;
-}
+/* Hide the dot spans added by dashboard.js */
+.status-dot { display: none; }
 
-.icon-btn-delete {
-  background: #fde8e8;
-  color: var(--red);
-  border-color: #f9c5c5;
-}
+.status-in-stock  { background: #d4f5ee; color: #008763; }
+.status-low-stock { background: #fff3cd; color: #b07a00; }
+.status-critical  { background: #fde8e8; color: #c0392b; }
 
-.icon-btn-delete:hover {
-  background: var(--red);
-  color: var(--white);
-  border-color: var(--red);
-}
-
-/* ── Empty state ─────────────────────────────────────── */
+/* ── Empty state ──────────────────────────────────────── */
 .table-empty {
   text-align: center;
   color: var(--gray-400);
-  padding: 48px 0;
+  padding: 52px 0;
   font-size: 15px;
 }
 
-/* ── Footer ──────────────────────────────────────────── */
+/* ── Footer count ─────────────────────────────────────── */
 .dash-footer {
-  margin-top: 14px;
+  padding: 10px 20px 14px;
   font-size: 13px;
   color: var(--gray-400);
   text-align: right;
-}
-
-/* ── Status badge variants ───────────────────────────── */
-.status-in-stock  { background: #00876318; color: #008763; border: 1px solid #00876340; }
-.status-low-stock { background: #FF8C0018; color: #FF8C00; border: 1px solid #FF8C0040; }
-.status-out-stock { background: #E3061318; color: #E30613; border: 1px solid #E3061340; }
-
-.dot-in-stock  { background: #008763; }
-.dot-low-stock { background: #FF8C00; }
-.dot-out-stock { background: #E30613; }
-
-/* ── Delete modal (centered variant) ────────────────── */
-.delete-icon-wrap {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: #fff0f0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 16px;
-}
-
-.modal-card.modal-center {
-  width: 340px;
-  text-align: center;
-}
-
-.modal-center .modal-actions {
-  justify-content: center;
-}
-
-.modal-center .delete-product-name {
-  font-size: 14px;
-  font-weight: 600;
-  margin-bottom: 24px;
-}
-
-.modal-center .delete-product-label {
-  font-size: 14px;
-  color: var(--gray-600);
-  margin-bottom: 4px;
 }
