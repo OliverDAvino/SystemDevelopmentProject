@@ -72,15 +72,15 @@ export function openAddModal(onAdd, onClose) {
       <form id="add-form" novalidate>
         <div class="form-group">
           <label for="add-name">Product Name</label>
-          <input id="add-name" type="text" placeholder="Value" />
+          <input id="add-name" type="text" placeholder="Value" autocorrect="off" spellcheck="false" />
         </div>
         <div class="form-group">
           <label for="add-size">Size</label>
-          <input id="add-size" type="text" placeholder="i.e 5 kg" />
+          <input id="add-size" type="text" placeholder="i.e (kg, bxe, cse) etc." />
         </div>
         <div class="form-group">
           <label for="add-qty">Quantity</label>
-          <input id="add-qty" type="number" min="0" placeholder="Value" />
+          <input id="add-qty" type="number" min="0" step="1" placeholder="Value" />
         </div>
         <p class="form-error hidden" id="add-error"></p>
         <div class="modal-actions">
@@ -105,12 +105,13 @@ export function openAddModal(onAdd, onClose) {
     const submitBtn   = overlay.querySelector('#add-submit');
 
     if (!name) { showError(errEl, 'Product name is required.'); return; }
-    if (quantityStr === '' || isNaN(Number(quantityStr))) {
-      showError(errEl, 'Valid quantity is required.');
+
+    const qty = Number(quantityStr);
+    if (quantityStr === '' || isNaN(qty) || !Number.isInteger(qty) || qty < 0) {
+      showError(errEl, 'Quantity must be a whole number (e.g. 10).');
       return;
     }
 
-    const qty    = Number(quantityStr);
     const status = qty < 10 ? 'critical' : qty < 50 ? 'low-stock' : 'in-stock';
 
     errEl.classList.add('hidden');
@@ -144,24 +145,24 @@ export function openUpdateModal(product, onUpdate, onClose) {
 
   overlay.innerHTML = `
     <div class="modal-card" id="modal-inner">
-      <h2>Update product</h2>
+      <h2>Edit Product</h2>
       <form id="update-form" novalidate>
         <div class="form-group">
-          <label for="upd-name">New name</label>
-          <input id="upd-name" type="text" value="${escHtml(product.name)}" />
+          <label for="upd-name">Product Name</label>
+          <input id="upd-name" type="text" placeholder="Value" autocorrect="off" spellcheck="false" value="${escHtml(product.name)}" />
         </div>
         <div class="form-group">
-          <label for="upd-size">New size</label>
-          <input id="upd-size" type="text" value="${escHtml(product.size || '')}" />
+          <label for="upd-size">Size</label>
+          <input id="upd-size" type="text" placeholder="i.e (kg, bxe, cse) etc." value="${escHtml(product.size || '')}" />
         </div>
         <div class="form-group">
-          <label for="upd-qty">New quantity</label>
-          <input id="upd-qty" type="number" min="0" value="${product.quantity}" />
+          <label for="upd-qty">Quantity</label>
+          <input id="upd-qty" type="number" min="0" step="1" placeholder="Value" value="${product.quantity}" />
         </div>
         <p class="form-error hidden" id="upd-error"></p>
         <div class="modal-actions">
           <button type="button" class="btn btn-cancel modal-cancel-btn" id="upd-cancel">Cancel</button>
-          <button type="submit" class="btn btn-primary modal-submit-btn" id="upd-submit">Apply Now</button>
+          <button type="submit" class="btn btn-primary modal-submit-btn" id="upd-submit">Save Changes</button>
         </div>
       </form>
     </div>
@@ -176,17 +177,19 @@ export function openUpdateModal(product, onUpdate, onClose) {
     e.preventDefault();
     const name        = overlay.querySelector('#upd-name').value.trim();
     const size        = overlay.querySelector('#upd-size').value.trim();
-    const quantityStr = overlay.querySelector('#upd-qty').value;
+    const quantityStr = overlay.querySelector('#upd-qty').value.trim();
     const errEl       = overlay.querySelector('#upd-error');
     const submitBtn   = overlay.querySelector('#upd-submit');
 
     if (!name) { showError(errEl, 'Product name is required.'); return; }
-    if (quantityStr === '' || isNaN(Number(quantityStr))) {
-      showError(errEl, 'Valid quantity is required.');
+    if (!size) { showError(errEl, 'Size is required.');         return; }
+
+    const qty = Number(quantityStr);
+    if (quantityStr === '' || isNaN(qty) || !Number.isInteger(qty) || qty < 0) {
+      showError(errEl, 'Quantity must be a whole number (e.g. 10).');
       return;
     }
 
-    const qty    = Number(quantityStr);
     const status = qty < 10 ? 'critical' : qty < 50 ? 'low-stock' : 'in-stock';
 
     errEl.classList.add('hidden');
@@ -199,7 +202,7 @@ export function openUpdateModal(product, onUpdate, onClose) {
     } catch (err) {
       showError(errEl, err.message);
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Apply Now';
+      submitBtn.textContent = 'Save Changes';
     }
   });
 }

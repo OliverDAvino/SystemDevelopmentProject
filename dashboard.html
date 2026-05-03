@@ -96,6 +96,14 @@
             </div>
           </div>
 
+          <!-- Sort direction toggle -->
+          <button class="sort-dir-btn" id="sort-dir-btn" title="Toggle sort direction" aria-label="Toggle sort direction">
+            <svg id="sort-dir-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="19" x2="12" y2="5"/>
+              <polyline points="5 12 12 5 19 12"/>
+            </svg>
+          </button>
+
           <div class="toolbar-divider"></div>
 
           <!-- Product Status dropdown trigger -->
@@ -154,6 +162,7 @@
 
       <div class="dash-footer">
         <span id="footer-count"></span>
+        <div class="pagination" id="pagination"></div>
       </div>
 
       </div><!-- /dash-card -->
@@ -166,11 +175,22 @@
     (function () {
       // ── Sort ────────────────────────────────────────
       var currentSort = 'id';
-      var sortTrigger = document.getElementById('sort-trigger');
-      var sortPanel   = document.getElementById('sort-panel');
-      var sortOptions = document.querySelectorAll('.sort-option');
-      var tbody       = document.getElementById('table-body');
-      var sorting     = false;
+      var sortTrigger  = document.getElementById('sort-trigger');
+      var sortPanel    = document.getElementById('sort-panel');
+      var sortOptions  = document.querySelectorAll('.sort-option');
+      var tbody        = document.getElementById('table-body');
+      var sortDirBtn   = document.getElementById('sort-dir-btn');
+      var sortDirIcon  = document.getElementById('sort-dir-icon');
+      var sortAsc      = true;
+
+      var iconUp   = '<line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/>';
+      var iconDown = '<line x1="12" y1="5" x2="12" y2="19"/><polyline points="5 12 12 19 19 12"/>';
+
+      sortDirBtn.addEventListener('click', function () {
+        sortAsc = !sortAsc;
+        sortDirIcon.innerHTML = sortAsc ? iconUp : iconDown;
+        document.dispatchEvent(new CustomEvent('sort-direction', { detail: { asc: sortAsc } }));
+      });
 
       // Toggle sort panel
       sortTrigger.addEventListener('click', function (e) {
@@ -192,55 +212,13 @@
       sortOptions.forEach(function (opt) {
         opt.addEventListener('click', function () {
           currentSort = this.dataset.sort;
-          // update checkmarks
           document.querySelectorAll('.sort-check').forEach(function (c) { c.classList.remove('checked'); });
           this.querySelector('.sort-check').classList.add('checked');
           sortPanel.classList.add('hidden');
           sortTrigger.setAttribute('aria-expanded', 'false');
-          applySort();
+          document.dispatchEvent(new CustomEvent('sort-change', { detail: { sort: currentSort } }));
         });
       });
-
-      // MutationObserver — re-sort after dashboard.js re-renders the table
-      var observer = new MutationObserver(function () {
-        if (!sorting) { setTimeout(applySort, 0); }
-      });
-      observer.observe(tbody, { childList: true });
-
-      function applySort() {
-        var rows = Array.from(tbody.querySelectorAll('tr'));
-        if (rows.length === 0) return;
-        // Skip if only the empty-state row is present
-        if (rows.length === 1 && rows[0].querySelector('.table-empty')) return;
-        sorting = true;
-        rows.sort(function (a, b) {
-          if (currentSort === 'id') {
-            var ai = parseInt((a.querySelector('.cell-num') || {}).textContent || '0', 10);
-            var bi = parseInt((b.querySelector('.cell-num') || {}).textContent || '0', 10);
-            return ai - bi;
-          }
-          if (currentSort === 'name') {
-            var an = (a.querySelector('.cell-name') || {}).textContent || '';
-            var bn = (b.querySelector('.cell-name') || {}).textContent || '';
-            return an.trim().localeCompare(bn.trim());
-          }
-          if (currentSort === 'size') {
-            var as = (a.querySelector('.cell-size') || {}).textContent || '';
-            var bs = (b.querySelector('.cell-size') || {}).textContent || '';
-            var an2 = parseFloat(as) || 0;
-            var bn2 = parseFloat(bs) || 0;
-            return an2 !== bn2 ? an2 - bn2 : as.trim().localeCompare(bs.trim());
-          }
-          if (currentSort === 'qty') {
-            var aq = parseInt((a.querySelector('.cell-qty') || {}).textContent || '0', 10);
-            var bq = parseInt((b.querySelector('.cell-qty') || {}).textContent || '0', 10);
-            return aq - bq;
-          }
-          return 0;
-        });
-        rows.forEach(function (r) { tbody.appendChild(r); });
-        sorting = false;
-      }
 
       // ── Product Status filter modal ──────────────────
       var statusTrigger = document.getElementById('status-trigger');
@@ -310,8 +288,9 @@
         // Reset sort
         currentSort = 'id';
         document.querySelectorAll('.sort-check').forEach(function (c) { c.classList.remove('checked'); });
-        var idCheck = document.getElementById('sort-check-id');
-        if (idCheck) idCheck.classList.add('checked');
+        sortAsc = true;
+        sortDirIcon.innerHTML = iconUp;
+        document.dispatchEvent(new CustomEvent('sort-change', { detail: { sort: 'id' } }));
         // Clear search
         var searchInput = document.getElementById('search-input');
         if (searchInput) { searchInput.value = ''; searchInput.dispatchEvent(new Event('input')); }

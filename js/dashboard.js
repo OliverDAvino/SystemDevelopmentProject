@@ -11,6 +11,10 @@ const isSecretary = getUser()?.role === 'secretary';
 let products      = [];
 let searchQuery   = '';
 let activeFilter  = 'all';
+let currentSort   = 'id';
+let sortAsc       = true;
+let currentPage   = 1;
+const PAGE_SIZE   = 10;
 
 /* ── Status config ─────────────────────────────────────── */
 const STATUS = {
@@ -26,9 +30,18 @@ const filterBtns   = document.querySelectorAll('.filter-btn');
 const addBtn       = document.getElementById('add-btn');
 const tableBody    = document.getElementById('table-body');
 const footerCount  = document.getElementById('footer-count');
+const pagination   = document.getElementById('pagination');
 
 /* ── Role-based UI ─────────────────────────────────────── */
 if (isSecretary) addBtn.classList.add('hidden');
+
+/* ── Delegated table button clicks ─────────────────────── */
+tableBody.addEventListener('click', e => {
+  const editBtn   = e.target.closest('.edit-btn');
+  const deleteBtn = e.target.closest('.delete-btn');
+  if (editBtn)   handleEdit(Number(editBtn.dataset.id));
+  if (deleteBtn) handleDelete(Number(deleteBtn.dataset.id));
+});
 
 /* ── Init ──────────────────────────────────────────────── */
 init();
@@ -50,15 +63,29 @@ logoutBtn.addEventListener('click', () => {
 
 searchInput.addEventListener('input', e => {
   searchQuery = e.target.value;
+  currentPage = 1;
   renderTable();
 });
 
 filterBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     activeFilter = btn.dataset.filter;
+    currentPage = 1;
     filterBtns.forEach(b => b.classList.toggle('active', b === btn));
     renderTable();
   });
+});
+
+document.addEventListener('sort-change', e => {
+  currentSort = e.detail.sort;
+  currentPage = 1;
+  renderTable();
+});
+
+document.addEventListener('sort-direction', e => {
+  sortAsc = e.detail.asc;
+  currentPage = 1;
+  renderTable();
 });
 
 addBtn.addEventListener('click', () => {
@@ -75,45 +102,67 @@ addBtn.addEventListener('click', () => {
 
 /* ── Render ────────────────────────────────────────────── */
 function getFiltered() {
-  return products.filter(p => {
+  const list = products.filter(p => {
     const matchesFilter = activeFilter === 'all' || p.status === activeFilter;
     const matchesSearch = !searchQuery.trim()
       || p.name.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
+
+  list.sort((a, b) => {
+    let cmp;
+    switch (currentSort) {
+      case 'name': cmp = a.name.localeCompare(b.name); break;
+      case 'size': {
+        const an = parseFloat(a.size) || 0, bn = parseFloat(b.size) || 0;
+        cmp = an !== bn ? an - bn : (a.size || '').localeCompare(b.size || '');
+        break;
+      }
+      case 'qty':  cmp = a.quantity - b.quantity; break;
+      default:     cmp = a.id - b.id;
+    }
+    return sortAsc ? cmp : -cmp;
+  });
+
+  return list;
 }
 
 function renderTable() {
-  const list = getFiltered();
-  footerCount.textContent = `Showing ${list.length} of ${products.length} products`;
+  const list       = getFiltered();
+  const totalPages = Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+  if (currentPage > totalPages) currentPage = totalPages;
+
+  const start = (currentPage - 1) * PAGE_SIZE;
+  const page  = list.slice(start, start + PAGE_SIZE);
+
+  footerCount.textContent = list.length === 0
+    ? `Showing 0 of ${products.length} products`
+    : `Showing ${start + 1}–${start + page.length} of ${list.length} products`;
 
   if (list.length === 0) {
-    tableBody.innerHTML = `
-      <tr>
-        <td colspan="6" class="table-empty">No products found.</td>
-      </tr>
-    `;
+    tableBody.innerHTML = `<tr><td colspan="6" class="table-empty">No products found.</td></tr>`;
+    pagination.innerHTML = '';
     return;
   }
 
-  tableBody.innerHTML = list.map((p, i) => buildRow(p, i)).join('');
+  tableBody.innerHTML = page.map(p => buildRow(p)).join('');
 
-  tableBody.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.addEventListener('click', () => handleEdit(Number(btn.dataset.id)));
-  });
-
-  tableBody.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.addEventListener('click', () => handleDelete(Number(btn.dataset.id)));
-  });
+  pagination.innerHTML = `
+    <button class="page-btn" id="page-prev" ${currentPage === 1 ? 'disabled' : ''}>&#8592;</button>
+    <span class="page-indicator">${currentPage} / ${totalPages}</span>
+    <button class="page-btn" id="page-next" ${currentPage === totalPages ? 'disabled' : ''}>&#8594;</button>
+  `;
+  document.getElementById('page-prev').addEventListener('click', () => { currentPage--; renderTable(); });
+  document.getElementById('page-next').addEventListener('click', () => { currentPage++; renderTable(); });
 }
 
-function buildRow(p, index) {
+function buildRow(p) {
   const s = STATUS[p.status] || { label: p.status };
-  const rowClass = index % 2 === 1 ? 'row-alt' : '';
+  const rowClass = '';
 
   return `
     <tr class="${rowClass}">
-      <td class="cell-num">${index + 1}</td>
+      <td class="cell-num">${p.id}</td>
       <td class="cell-name">${escHtml(p.name)}</td>
       <td class="cell-size">${escHtml(p.size || '')}</td>
       <td class="cell-qty">${p.quantity}</td>
@@ -126,7 +175,7 @@ function buildRow(p, index) {
         </div>
       </td>
       <td>
-        <span class="status-badge status-${p.status}">
+        <span class="status-badge status-${p.status}" title="Product has ${p.quantity} item${p.quantity === 1 ? '' : 's'}">
           ${s.label}
         </span>
       </td>
@@ -136,8 +185,8 @@ function buildRow(p, index) {
 
 /* ── Action handlers ───────────────────────────────────── */
 function handleEdit(id) {
-  const product = products.find(p => p.id === id);
-  if (!product) return;
+  const product = products.find(p => p.id == id);
+  if (!product) { console.error('Edit: product not found for id', id, products.map(p => p.id)); return; }
 
   openUpdateModal(
     product,
@@ -152,7 +201,7 @@ function handleEdit(id) {
 }
 
 function handleDelete(id) {
-  const product = products.find(p => p.id === id);
+  const product = products.find(p => p.id == id);
   if (!product) return;
 
   openDeleteModal(

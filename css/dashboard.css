@@ -178,6 +178,24 @@
 
 .reset-btn:hover { background: #fff0f0; }
 
+/* Sort direction arrow */
+.sort-dir-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: none;
+  border: 1px solid var(--gray-200);
+  color: var(--gray-600);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.sort-dir-btn:hover { background: var(--gray-100); color: var(--black); }
+
 /* Add Product button */
 .add-btn {
   background: var(--black);
@@ -417,5 +435,40 @@
   padding: 10px 20px 14px;
   font-size: 13px;
   color: var(--gray-400);
-  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-btn {
+  background: none;
+  border: 1px solid var(--gray-200);
+  border-radius: 6px;
+  padding: 3px 10px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--gray-600);
+  transition: background 0.15s;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: var(--gray-100);
+}
+
+.page-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.page-indicator {
+  font-size: 13px;
+  color: var(--gray-500);
+  min-width: 48px;
+  text-align: center;
 }
